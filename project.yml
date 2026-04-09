@@ -61,6 +61,7 @@ targets:
     product: CycleWidgetExtension
     sources:
       - CycleWidgetExtension
+      - path: Cycle/Services/SharedData.swift
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.cycleapp.cycle.widget
