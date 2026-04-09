@@ -29,6 +29,7 @@ targets:
       path: Cycle/Info.plist
       properties:
         CFBundleDisplayName: Cycle
+        NSFaceIDUsageDescription: "Cycle uses Face ID to protect your private health data."
         NSHealthShareUsageDescription: "Cycle uses HealthKit to read your health data for cycle tracking insights."
         NSHealthUpdateUsageDescription: "Cycle uses HealthKit to save cycle data to your health records."
     entitlements:
