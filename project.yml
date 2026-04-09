@@ -1,0 +1,88 @@
+name: Cycle
+options:
+  bundleIdPrefix: com.cycleapp
+  deploymentTarget:
+    iOS: "17.0"
+
+targets:
+  Cycle:
+    type: application
+    platform: iOS
+    sources:
+      - Cycle
+    settings:
+      base:
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.cycleapp.cycle
+        SWIFT_VERSION: "5.9"
+        CODE_SIGN_ENTITLEMENTS: Cycle/Cycle.entitlements
+      groups:
+        - debug
+        - release
+      configs:
+        debug:
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+        release:
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+    info:
+      path: Cycle/Info.plist
+      properties:
+        CFBundleDisplayName: Cycle
+        NSHealthShareUsageDescription: "Cycle uses HealthKit to read your health data for cycle tracking insights."
+        NSHealthUpdateUsageDescription: "Cycle uses HealthKit to save cycle data to your health records."
+    entitlements:
+      path: Cycle/Cycle.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.cycleapp.shared
+        com.apple.developer.healthkit: true
+        com.apple.developer.healthkit.access: []
+    capabilities:
+      HealthKit: true
+
+  CycleTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - CycleTests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.cycleapp.cycle.tests
+        SWIFT_VERSION: "5.9"
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: Cycle
+
+  CycleWidgetExtension:
+    type: app-extension
+    platform: iOS
+    product: CycleWidgetExtension
+    sources:
+      - CycleWidgetExtension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.cycleapp.cycle.widget
+        SWIFT_VERSION: "5.9"
+        CODE_SIGN_ENTITLEMENTS: CycleWidgetExtension/CycleWidgetExtension.entitlements
+    info:
+      path: CycleWidgetExtension/Info.plist
+      properties:
+        CFBundleDisplayName: CycleWidget
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: CycleWidgetExtension/CycleWidgetExtension.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.cycleapp.shared
+    dependencies:
+      - target: Cycle
+        embed: false
+        link: false
+
+settingGroups:
+  debug:
+    DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+  release:
+    DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
