@@ -20,16 +20,24 @@ extension Date {
         Calendar.current.date(byAdding: .month, value: months, to: self)!
     }
 
+    private static let monthYearFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "MMMM yyyy"
+        return f
+    }()
+
+    private static let shortDateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateStyle = .medium
+        return f
+    }()
+
     var monthYearString: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM yyyy"
-        return formatter.string(from: self)
+        Self.monthYearFormatter.string(from: self)
     }
 
     var shortDateString: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        return formatter.string(from: self)
+        Self.shortDateFormatter.string(from: self)
     }
 
     var dayOfMonth: Int {

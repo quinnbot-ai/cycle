@@ -14,7 +14,12 @@ struct SettingsView: View {
     @State private var exportURL: URL?
 
     private var settings: AppSettings {
-        settingsArray.first ?? AppSettings()
+        if let existing = settingsArray.first {
+            return existing
+        }
+        let newSettings = AppSettings()
+        modelContext.insert(newSettings)
+        return newSettings
     }
 
     var body: some View {

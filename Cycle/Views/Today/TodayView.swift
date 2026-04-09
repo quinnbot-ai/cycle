@@ -51,9 +51,11 @@ struct TodayView: View {
                 }
             }
             .onAppear(perform: loadTodayEntry)
+            .onDisappear { saveEntry() }
             .onChange(of: flowLevel) { _, _ in saveEntry() }
             .onChange(of: mood) { _, _ in saveEntry() }
             .onChange(of: symptoms) { _, _ in saveEntry() }
+            .onChange(of: notes) { _, _ in saveEntry() }
         }
     }
 

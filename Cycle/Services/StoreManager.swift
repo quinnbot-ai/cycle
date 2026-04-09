@@ -2,13 +2,13 @@ import Foundation
 import StoreKit
 import Observation
 
-@Observable
+@MainActor @Observable
 final class StoreManager {
     static let proProductID = "com.cycleapp.pro"
 
     private(set) var proProduct: Product?
     private(set) var isPro = false
-    private var updateTask: Task<Void, Never>?
+    private nonisolated(unsafe) var updateTask: Task<Void, Never>?
 
     init() {
         updateTask = Task { await listenForTransactions() }

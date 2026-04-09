@@ -53,6 +53,8 @@ enum NotificationManager {
     }
 
     static func removeAll() {
-        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        UNUserNotificationCenter.current().removePendingNotificationRequests(
+            withIdentifiers: [periodReminderID, logReminderID]
+        )
     }
 }

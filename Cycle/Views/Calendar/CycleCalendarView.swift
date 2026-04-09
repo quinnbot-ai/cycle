@@ -10,7 +10,7 @@ struct CycleCalendarView: View {
     private var calendar: Calendar { Calendar.current }
 
     private var entriesByDate: [Date: PeriodEntry] {
-        Dictionary(uniqueKeysWithValues: allEntries.map { ($0.date.startOfDay, $0) })
+        Dictionary(allEntries.map { ($0.date.startOfDay, $0) }, uniquingKeysWith: { first, _ in first })
     }
 
     private var daysInMonth: [Date] {

@@ -2,7 +2,7 @@ import Foundation
 import HealthKit
 import Observation
 
-@Observable
+@MainActor @Observable
 final class HealthKitManager {
     private let store = HKHealthStore()
     private(set) var isAuthorized = false

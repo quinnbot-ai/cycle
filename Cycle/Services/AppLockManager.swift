@@ -2,7 +2,7 @@ import Foundation
 import LocalAuthentication
 import Observation
 
-@Observable
+@MainActor @Observable
 final class AppLockManager {
     var isLocked = false
     private var lastBackgroundDate: Date?
