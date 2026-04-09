@@ -4,6 +4,8 @@ import SwiftData
 struct InsightsView: View {
     @Query(sort: \PeriodEntry.date, order: .forward) private var allEntries: [PeriodEntry]
 
+    let storeManager: StoreManager
+
     private var cycles: [CycleInfo] {
         CycleCalculator.deriveCycles(from: allEntries)
     }

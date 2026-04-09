@@ -5,6 +5,8 @@ struct TodayView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \PeriodEntry.date, order: .forward) private var allEntries: [PeriodEntry]
 
+    let storeManager: StoreManager
+
     @State private var flowLevel: FlowLevel = .none
     @State private var mood: Mood = .okay
     @State private var symptoms: Set<Symptom> = []
@@ -41,6 +43,13 @@ struct TodayView: View {
             }
             .background(CycleTheme.backgroundColor)
             .navigationTitle("Today")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink(destination: SettingsView(storeManager: storeManager)) {
+                        Image(systemName: "gearshape")
+                    }
+                }
+            }
             .onAppear(perform: loadTodayEntry)
             .onChange(of: flowLevel) { _, _ in saveEntry() }
             .onChange(of: mood) { _, _ in saveEntry() }
