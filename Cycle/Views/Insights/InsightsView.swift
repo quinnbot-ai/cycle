@@ -5,6 +5,7 @@ struct InsightsView: View {
     @Query(sort: \PeriodEntry.date, order: .forward) private var allEntries: [PeriodEntry]
 
     let storeManager: StoreManager
+    @State private var showingProSheet = false
 
     private var cycles: [CycleInfo] {
         CycleCalculator.deriveCycles(from: allEntries)
@@ -103,12 +104,36 @@ struct InsightsView: View {
             HStack {
                 Text("Analytics")
                     .font(CycleTheme.subheaderFont)
-                ProBadge()
+                if !storeManager.isPro {
+                    ProBadge()
+                }
             }
             .foregroundStyle(CycleTheme.textColor)
 
-            TrendChartView(cycles: completedCycles)
-            PhaseEstimateView(cycles: cycles)
+            if storeManager.isPro {
+                TrendChartView(cycles: completedCycles)
+                PhaseEstimateView(cycles: cycles)
+            } else {
+                Button {
+                    showingProSheet = true
+                } label: {
+                    VStack(spacing: 8) {
+                        Image(systemName: "lock.fill")
+                            .font(.system(size: 24))
+                        Text("Unlock cycle analytics, phase estimates, and custom symptoms")
+                            .font(CycleTheme.captionFont)
+                            .multilineTextAlignment(.center)
+                    }
+                    .foregroundStyle(CycleTheme.textColor.opacity(0.5))
+                    .frame(maxWidth: .infinity)
+                    .padding(24)
+                    .background(CycleTheme.textColor.opacity(0.04))
+                    .clipShape(RoundedRectangle(cornerRadius: CycleTheme.cornerRadius))
+                }
+                .sheet(isPresented: $showingProSheet) {
+                    ProUpgradeSheet(storeManager: storeManager)
+                }
+            }
         }
     }
 }
