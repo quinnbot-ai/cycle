@@ -12,7 +12,8 @@ final class AppLockManager {
         var error: NSError?
 
         guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) else {
-            return false
+            isLocked = false
+            return true
         }
 
         do {

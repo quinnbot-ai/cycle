@@ -21,7 +21,7 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             TabView {
-                TodayView(storeManager: storeManager)
+                TodayView(storeManager: storeManager, healthKitManager: healthKitManager)
                     .tabItem {
                         Label("Today", systemImage: "circle.fill")
                     }

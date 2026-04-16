@@ -28,7 +28,6 @@ struct ProUpgradeSheet: View {
                 VStack(alignment: .leading, spacing: 12) {
                     FeatureRow(icon: "chart.line.uptrend.xyaxis", text: "Cycle length trends & analytics")
                     FeatureRow(icon: "calendar.badge.clock", text: "Luteal & follicular phase estimates")
-                    FeatureRow(icon: "plus.circle", text: "Custom symptoms")
                 }
                 .padding(.horizontal, 24)
 

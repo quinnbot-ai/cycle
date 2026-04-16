@@ -7,19 +7,17 @@ struct SettingsView: View {
     @Query(sort: \PeriodEntry.date) private var allEntries: [PeriodEntry]
 
     let storeManager: StoreManager
+    var healthKitManager: HealthKitManager?
 
     @State private var showingProSheet = false
     @State private var showingDeleteConfirmation = false
     @State private var showingExportSheet = false
     @State private var exportURL: URL?
+    @State private var healthSyncStatus: String = ""
+    @State private var isHealthSyncing = false
 
     private var settings: AppSettings {
-        if let existing = settingsArray.first {
-            return existing
-        }
-        let newSettings = AppSettings()
-        modelContext.insert(newSettings)
-        return newSettings
+        settingsArray.first ?? AppSettings()
     }
 
     var body: some View {
@@ -56,7 +54,19 @@ struct SettingsView: View {
             Section("Notifications") {
                 Toggle("Notifications", isOn: Binding(
                     get: { settings.notificationsEnabled },
-                    set: { settings.notificationsEnabled = $0 }
+                    set: { newValue in
+                        if newValue {
+                            Task {
+                                let granted = await NotificationManager.requestPermission()
+                                await MainActor.run {
+                                    settings.notificationsEnabled = granted
+                                }
+                            }
+                        } else {
+                            settings.notificationsEnabled = false
+                            NotificationManager.removeAll()
+                        }
+                    }
                 ))
 
                 if settings.notificationsEnabled {
@@ -89,6 +99,52 @@ struct SettingsView: View {
                 }
             }
 
+            if let healthKitManager {
+                Section("Health") {
+                    Button {
+                        isHealthSyncing = true
+                        Task {
+                            let authorized = await healthKitManager.requestAuthorization()
+                            if authorized {
+                                let existingDates = Set(allEntries.map { $0.date.startOfDay })
+                                let imported = await healthKitManager.importEntries(existingDates: existingDates)
+                                await MainActor.run {
+                                    for entry in imported {
+                                        modelContext.insert(entry)
+                                    }
+                                    healthSyncStatus = imported.isEmpty ? "Synced — no new entries" : "Imported \(imported.count) entries"
+                                    isHealthSyncing = false
+                                }
+                            } else {
+                                await MainActor.run {
+                                    healthSyncStatus = "Authorization denied — enable in Settings > Privacy > Health"
+                                    isHealthSyncing = false
+                                }
+                            }
+                        }
+                    } label: {
+                        HStack {
+                            Label("Sync with Apple Health", systemImage: "heart.fill")
+                            Spacer()
+                            if isHealthSyncing {
+                                ProgressView()
+                            } else if !healthSyncStatus.isEmpty {
+                                Text(healthSyncStatus)
+                                    .font(CycleTheme.captionFont)
+                                    .foregroundStyle(CycleTheme.textColor.opacity(0.5))
+                            }
+                        }
+                    }
+                    .disabled(isHealthSyncing || !healthKitManager.isAvailable)
+
+                    if !healthKitManager.isAvailable {
+                        Text("Apple Health is not available on this device.")
+                            .font(CycleTheme.captionFont)
+                            .foregroundStyle(CycleTheme.textColor.opacity(0.5))
+                    }
+                }
+            }
+
             Section("Your Data") {
                 Button {
                     exportURL = ExportManager.exportURL(from: allEntries)
@@ -107,7 +163,7 @@ struct SettingsView: View {
             Section("About") {
                 LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")
 
-                Link(destination: URL(string: "https://github.com/cycleapp/cycle")!) {
+                Link(destination: URL(string: "https://github.com/quinnbot-ai/cycle")!) {
                     Label("Source Code", systemImage: "chevron.left.forwardslash.chevron.right")
                 }
 
@@ -119,6 +175,11 @@ struct SettingsView: View {
             }
         }
         .navigationTitle("Settings")
+        .onAppear {
+            if settingsArray.isEmpty {
+                modelContext.insert(AppSettings())
+            }
+        }
         .sheet(isPresented: $showingProSheet) {
             ProUpgradeSheet(storeManager: storeManager)
         }

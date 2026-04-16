@@ -1,16 +1,19 @@
 import SwiftUI
 import SwiftData
+import WidgetKit
 
 struct TodayView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \PeriodEntry.date, order: .forward) private var allEntries: [PeriodEntry]
 
     let storeManager: StoreManager
+    var healthKitManager: HealthKitManager?
 
     @State private var flowLevel: FlowLevel = .none
     @State private var mood: Mood = .okay
     @State private var symptoms: Set<Symptom> = []
     @State private var notes: String = ""
+    @State private var hasUserModified = false
 
     private var cycles: [CycleInfo] {
         CycleCalculator.deriveCycles(from: allEntries)
@@ -45,17 +48,17 @@ struct TodayView: View {
             .navigationTitle("Today")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(destination: SettingsView(storeManager: storeManager)) {
+                    NavigationLink(destination: SettingsView(storeManager: storeManager, healthKitManager: healthKitManager)) {
                         Image(systemName: "gearshape")
                     }
                 }
             }
             .onAppear(perform: loadTodayEntry)
-            .onDisappear { saveEntry() }
-            .onChange(of: flowLevel) { _, _ in saveEntry() }
-            .onChange(of: mood) { _, _ in saveEntry() }
-            .onChange(of: symptoms) { _, _ in saveEntry() }
-            .onChange(of: notes) { _, _ in saveEntry() }
+            .onDisappear { if hasUserModified { saveEntry() } }
+            .onChange(of: flowLevel) { _, _ in hasUserModified = true; saveEntry() }
+            .onChange(of: mood) { _, _ in hasUserModified = true; saveEntry() }
+            .onChange(of: symptoms) { _, _ in hasUserModified = true; saveEntry() }
+            .onChange(of: notes) { _, _ in hasUserModified = true; saveEntry() }
         }
     }
 
@@ -125,6 +128,7 @@ struct TodayView: View {
     }
 
     private func saveEntry() {
+        guard hasUserModified else { return }
         let today = Date().startOfDay
         if let entry = todayEntry {
             entry.flowLevel = flowLevel
@@ -142,5 +146,6 @@ struct TodayView: View {
             )
             modelContext.insert(entry)
         }
+        WidgetCenter.shared.reloadAllTimelines()
     }
 }
