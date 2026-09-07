@@ -12,6 +12,9 @@ targets:
       - Cycle
     scheme:
       storeKitConfiguration: Cycle/Cycle.storekit
+      testTargets:
+        - CycleTests
+        - CycleUITests
     settings:
       base:
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
@@ -51,6 +54,19 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.cycleapp.cycle.tests
+        SWIFT_VERSION: "5.9"
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: Cycle
+
+  CycleUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - CycleUITests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.cycleapp.cycle.uitests
         SWIFT_VERSION: "5.9"
         GENERATE_INFOPLIST_FILE: YES
     dependencies:
