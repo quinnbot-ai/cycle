@@ -33,7 +33,6 @@ targets:
         CFBundleDisplayName: Cycle
         NSFaceIDUsageDescription: "Cycle uses Face ID to protect your private health data."
         NSHealthShareUsageDescription: "Cycle reads menstrual-flow entries from Apple Health when you choose to sync."
-        NSHealthUpdateUsageDescription: "Cycle saves menstrual-flow entries to Apple Health when you choose to sync."
     entitlements:
       path: Cycle/Cycle.entitlements
       properties:

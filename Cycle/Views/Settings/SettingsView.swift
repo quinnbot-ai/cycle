@@ -161,7 +161,7 @@ struct SettingsView: View {
             }
 
             Section("Privacy & Estimates") {
-                Text("Cycle data is stored on this device. When you choose to sync with Apple Health, Cycle reads menstrual-flow entries from and writes new flow entries to Apple Health.")
+                Text("Cycle data is stored on this device. When you choose to sync with Apple Health, Cycle reads menstrual-flow entries from Apple Health.")
                     .font(CycleTheme.captionFont)
                     .foregroundStyle(CycleTheme.textColor.opacity(0.5))
 

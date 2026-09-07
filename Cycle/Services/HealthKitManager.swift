@@ -11,10 +11,6 @@ final class HealthKitManager {
         HKCategoryType(.menstrualFlow),
     ]
 
-    private let writeTypes: Set<HKSampleType> = [
-        HKCategoryType(.menstrualFlow),
-    ]
-
     var isAvailable: Bool {
         HKHealthStore.isHealthDataAvailable()
     }
@@ -22,7 +18,7 @@ final class HealthKitManager {
     func requestAuthorization() async -> Bool {
         guard isAvailable else { return false }
         do {
-            try await store.requestAuthorization(toShare: writeTypes, read: readTypes)
+            try await store.requestAuthorization(toShare: [], read: readTypes)
             isAuthorized = true
             return true
         } catch {
@@ -68,30 +64,4 @@ final class HealthKitManager {
         }
     }
 
-    func writeEntry(_ entry: PeriodEntry) async {
-        guard isAuthorized, entry.flowLevel.isFlow else { return }
-
-        let flowType = HKCategoryType(.menstrualFlow)
-        let hkValue: Int
-        switch entry.flowLevel {
-        case .none: return
-        case .spotting: hkValue = HKCategoryValueMenstrualFlow.light.rawValue
-        case .light: hkValue = HKCategoryValueMenstrualFlow.light.rawValue
-        case .medium: hkValue = HKCategoryValueMenstrualFlow.medium.rawValue
-        case .heavy: hkValue = HKCategoryValueMenstrualFlow.heavy.rawValue
-        }
-
-        let sample = HKCategorySample(
-            type: flowType,
-            value: hkValue,
-            start: entry.date,
-            end: entry.date.adding(days: 1)
-        )
-
-        do {
-            try await store.save(sample)
-        } catch {
-            // Write failed
-        }
-    }
 }
