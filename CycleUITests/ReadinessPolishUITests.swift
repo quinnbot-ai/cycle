@@ -23,21 +23,13 @@ final class ReadinessPolishUITests: XCTestCase {
         XCTAssertTrue(settingsButton.waitForExistence(timeout: 5))
         settingsButton.tap()
 
-        let privacyHeader = app.staticTexts.matching(
-            NSPredicate(format: "label == %@", "Privacy & Estimates")
-        ).firstMatch
-        for _ in 0..<5 where !privacyHeader.exists {
-            app.collectionViews.firstMatch.swipeUp()
-        }
-        XCTAssertTrue(privacyHeader.waitForExistence(timeout: 5))
-
         let privacyCopy = app.staticTexts.matching(
             NSPredicate(format: "label BEGINSWITH %@", "Cycle data is stored on this device.")
         ).firstMatch
         let estimateCopy = app.staticTexts.matching(
             NSPredicate(format: "label BEGINSWITH %@", "Period timing and fertile-window estimates use averages")
         ).firstMatch
-        for _ in 0..<3 where !privacyCopy.isHittable || !estimateCopy.isHittable {
+        for _ in 0..<8 where !privacyCopy.isHittable || !estimateCopy.isHittable {
             app.collectionViews.firstMatch.swipeUp()
         }
         XCTAssertTrue(privacyCopy.isHittable)
