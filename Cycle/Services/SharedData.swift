@@ -13,6 +13,7 @@ enum SharedData {
     }
 
     static var daysUntilNextPeriod: Int? {
+        guard defaults.object(forKey: "daysUntilNextPeriod") != nil else { return nil }
         let value = defaults.integer(forKey: "daysUntilNextPeriod")
         return value >= 0 ? value : nil
     }

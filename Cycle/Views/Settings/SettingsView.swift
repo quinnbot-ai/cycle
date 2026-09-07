@@ -160,17 +160,21 @@ struct SettingsView: View {
                 }
             }
 
+            Section("Privacy & Estimates") {
+                Text("Cycle data is stored on this device. When you choose to sync with Apple Health, Cycle reads menstrual-flow entries from and writes new flow entries to Apple Health.")
+                    .font(CycleTheme.captionFont)
+                    .foregroundStyle(CycleTheme.textColor.opacity(0.5))
+
+                Text("Period timing and fertile-window estimates use averages from your logged cycles. They are not medical advice or a contraceptive method.")
+                    .font(CycleTheme.captionFont)
+                    .foregroundStyle(CycleTheme.textColor.opacity(0.5))
+            }
+
             Section("About") {
                 LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")
 
                 Link(destination: URL(string: "https://github.com/quinnbot-ai/cycle")!) {
                     Label("Source Code", systemImage: "chevron.left.forwardslash.chevron.right")
-                }
-
-                LabeledContent("Privacy") {
-                    Text("Your data stays on your phone. That's it.")
-                        .font(CycleTheme.captionFont)
-                        .foregroundStyle(CycleTheme.textColor.opacity(0.5))
                 }
             }
         }

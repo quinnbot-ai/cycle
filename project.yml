@@ -10,6 +10,8 @@ targets:
     platform: iOS
     sources:
       - Cycle
+    scheme:
+      storeKitConfiguration: Cycle/Cycle.storekit
     settings:
       base:
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
@@ -30,8 +32,8 @@ targets:
       properties:
         CFBundleDisplayName: Cycle
         NSFaceIDUsageDescription: "Cycle uses Face ID to protect your private health data."
-        NSHealthShareUsageDescription: "Cycle uses HealthKit to read your health data for cycle tracking insights."
-        NSHealthUpdateUsageDescription: "Cycle uses HealthKit to save cycle data to your health records."
+        NSHealthShareUsageDescription: "Cycle reads menstrual-flow entries from Apple Health when you choose to sync."
+        NSHealthUpdateUsageDescription: "Cycle saves menstrual-flow entries to Apple Health when you choose to sync."
     entitlements:
       path: Cycle/Cycle.entitlements
       properties:

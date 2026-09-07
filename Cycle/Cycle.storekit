@@ -1,0 +1,50 @@
+{
+  "identifier" : "Cycle",
+  "nonConsumableProducts" : [
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "B2C3D4E5-F6A7-8901-BCDE-F12345678902",
+      "localizations" : [
+        {
+          "description" : "Unlock Cycle Pro for cycle trends and phase estimates.",
+          "displayName" : "Cycle Pro",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.cycleapp.pro",
+      "referenceName" : "Cycle Pro",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_askToBuyEnabled" : false,
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      }
+    ]
+  },
+  "version" : {
+    "major" : 3,
+    "minor" : 0,
+    "patch" : 0
+  }
+}
