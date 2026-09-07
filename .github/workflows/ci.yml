@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - run: brew install xcodegen
+      - run: xcodegen generate
+      - name: Build and test
+        run: |
+          UDID=$(xcrun simctl list devices available | grep -E "iPhone" | grep -Eo "[0-9A-Fa-f]{8}-[0-9A-Fa-f-]{27}" | head -1)
+          xcodebuild test -project Cycle.xcodeproj -scheme Cycle \
+            -destination "platform=iOS Simulator,id=$UDID" CODE_SIGNING_ALLOWED=NO

@@ -9,7 +9,7 @@ struct CountdownProvider: TimelineProvider {
     func getSnapshot(in context: Context, completion: @escaping (CountdownEntry) -> Void) {
         completion(CountdownEntry(
             date: Date(),
-            daysUntil: SharedData.daysUntilNextPeriod ?? 5,
+            daysUntil: SharedData.daysUntilNextPeriod,
             nextDateString: SharedData.nextPeriodDateString ?? ""
         ))
     }

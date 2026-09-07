@@ -51,6 +51,7 @@ struct TodayView: View {
                     NavigationLink(destination: SettingsView(storeManager: storeManager, healthKitManager: healthKitManager)) {
                         Image(systemName: "gearshape")
                     }
+                    .accessibilityLabel("Settings")
                 }
             }
             .onAppear(perform: loadTodayEntry)

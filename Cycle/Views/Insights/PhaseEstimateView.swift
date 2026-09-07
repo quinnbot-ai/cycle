@@ -27,7 +27,7 @@ struct PhaseEstimateView: View {
 
                 HStack(spacing: 16) {
                     PhaseLegend(color: CycleTheme.primaryColor, label: "Period")
-                    PhaseLegend(color: CycleTheme.fertileColor, label: "Fertile window")
+                    PhaseLegend(color: CycleTheme.fertileColor, label: "Estimated fertile window")
                     PhaseLegend(color: CycleTheme.secondaryColor, label: "Luteal")
                 }
                 .font(CycleTheme.captionFont)

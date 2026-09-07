@@ -7,7 +7,7 @@ struct CycleDayProvider: TimelineProvider {
     }
 
     func getSnapshot(in context: Context, completion: @escaping (CycleDayEntry) -> Void) {
-        completion(CycleDayEntry(date: Date(), cycleDay: SharedData.currentCycleDay ?? 14))
+        completion(CycleDayEntry(date: Date(), cycleDay: SharedData.currentCycleDay))
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<CycleDayEntry>) -> Void) {
